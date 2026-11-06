@@ -32,7 +32,7 @@ B. SUBIR LA WEB A GITHUB
 - Guarda/commit los cambios y espera a que GitHub Pages publique.
 
 C. FIREBASE: REGLAS
-- Firebase Console > family-swan > Firestore Database > Rules.
+- Firebase Console > family-swan-6c481 > Firestore Database > Rules.
 - Conserva las reglas de fase 2 que están en REGLAS_FIRESTORE.txt. No reemplaces por reglas públicas de escritura.
 - La lectura de los documentos familySwan está abierta para mostrar la página a visitantes; escritura solo creador/admin.
 - familySwanRoles solo puede gestionarlo el creador.
@@ -45,8 +45,8 @@ Requisitos: Node.js 20/22 y Firebase CLI. Revisa la guía oficial y pide ayuda a
   npm install -g firebase-tools
   firebase login
   firebase projects:list
-- Confirma que el proyecto seleccionado es family-swan. Si no lo es, ejecuta:
-  firebase use family-swan
+- Confirma que el proyecto seleccionado es family-swan-6c481. Si no lo es, ejecuta:
+  firebase use family-swan-6c481
 - Despliega:
   firebase deploy --only functions
 - Debe aparecer crearAdministradorSWAN en us-central1.
@@ -113,3 +113,10 @@ FASE 4.1 — FOTOS DE PERFIL Y CHAT FAMILIAR
 - Abre la página en dos navegadores/dispositivos.
 - Prueba enviar un mensaje y cambiar una foto de integrante como administrador.
 - Si no funciona, revisa la consola del navegador y las reglas de Firestore.
+
+
+CONFIGURACIÓN NUEVA (6 NOV 2026)
+- Proyecto Firebase: family-swan-6c481
+- UID del creador ya actualizado en script.js, functions/index.js y REGLAS_FIRESTORE.txt.
+- firebaseConfig web ya actualizado en script.js.
+- .firebaserc apunta al proyecto nuevo.
