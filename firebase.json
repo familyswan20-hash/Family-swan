@@ -1,4 +1,0 @@
-{
-  "functions": [{ "source": "functions", "codebase": "default" }],
-  "firestore": { "rules": "REGLAS_FIRESTORE.txt" }
-}
