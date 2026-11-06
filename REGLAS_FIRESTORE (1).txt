@@ -1,0 +1,47 @@
+REGLAS FIRESTORE — FASE 2 (LECTURA PARA TODOS, ESCRITURA SOLO CREADOR/ADMIN)
+
+Estas reglas permiten que cualquier visitante de la web lea los datos mostrados en FAMILY SWAN. Solo el creador y los UID guardados en familySwanRoles pueden modificarlos.
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function esCreador() {
+      return request.auth != null
+        && request.auth.uid == "Nvaojypv4QOSvd9TK37dBq9UF6x2";
+    }
+
+    function esAdministrador() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/familySwanRoles/$(request.auth.uid))
+        && get(/databases/$(database)/documents/familySwanRoles/$(request.auth.uid)).data.rol == "administrador";
+    }
+
+    match /familySwan/{documento} {
+      allow read: if true;
+      allow write: if esCreador() || esAdministrador();
+    }
+
+    // Chat público para usuarios autenticados anónimamente; mensajes limitados y sin datos sensibles.
+    match /familySwanChat/{mensajeId} {
+      allow read: if true;
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasOnly(["nombre", "texto", "fecha", "uid"])
+        && request.resource.data.nombre is string
+        && request.resource.data.nombre.size() > 0
+        && request.resource.data.nombre.size() <= 24
+        && request.resource.data.texto is string
+        && request.resource.data.texto.size() > 0
+        && request.resource.data.texto.size() <= 300
+        && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if esCreador();
+    }
+
+    match /familySwanRoles/{uid} {
+      allow get: if esCreador() || (request.auth != null && request.auth.uid == uid);
+      allow list: if esCreador();
+      allow create, update, delete: if esCreador();
+    }
+  }
+}
+
+IMPORTANTE: Firestore permitirá lectura pública de los datos familiares para que cualquier visitante de la página vea los cambios. No guardes direcciones, teléfonos, contraseñas ni información privada/sensible en estos documentos. La escritura sigue protegida por inicio de sesión y roles.

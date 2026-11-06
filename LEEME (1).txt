@@ -1,0 +1,115 @@
+FAMILY SWAN — FASE 4
+ADMINISTRADORES SIN CORREO + TEMPORADAS + COLORES
+
+QUÉ INCLUYE
+- Crear administradores desde la página con nombre, usuario y contraseña (sin correo real).
+- Iniciar sesión con usuario y contraseña. El creador conserva su correo habitual.
+- El creador puede quitar permisos de administrador.
+- Los administradores pueden editar integrantes, eventos y galería; sus cambios se sincronizan por Firestore en tiempo real.
+- Nuevo apartado del creador: Personalizar FAMILY SWAN.
+- Temporadas Normal, Halloween, Navidad y Primavera.
+- Halloween: tonos oscuros y decoraciones (araña, calabaza y telaraña).
+- Navidad: regalos, árbol y nieve animada.
+- Primavera: flores decorativas.
+- Selector de color principal y color de fondo.
+- Opción para apagar las animaciones.
+- La temporada y colores se guardan en Firestore y los visitantes los reciben automáticamente.
+
+ANTES DE EMPEZAR
+1. Haz una copia de seguridad de tu repositorio y de los archivos actuales.
+2. Cloud Functions necesita Firebase Blaze (facturación). Habla con un adulto responsable, revisen posibles cargos y configuren alertas. No actives facturación sin autorización.
+3. No publiques contraseñas en GitHub. La información de familySwan es públicamente legible según las reglas anteriores; no guardes datos privados.
+
+INSTALACIÓN DESDE CERO / ACTUALIZACIÓN
+A. DESCARGAR Y DESCOMPRIMIR
+- Descarga FAMILY_SWAN_fase4.zip y pulsa clic derecho > Extraer todo.
+- Entra en la carpeta family_swan_firebase.
+
+B. SUBIR LA WEB A GITHUB
+- En tu repositorio, reemplaza index.html, script.js y styles.css por los de esta carpeta.
+- Conserva tus imágenes: foto-familia.jpg, logo-swan.png (si ya lo tienes) y osito-admin.png. El ZIP incluye foto-familia y osito.
+- No borres las fotos de perfiles ni otros recursos que ya usa tu árbol/galería.
+- Guarda/commit los cambios y espera a que GitHub Pages publique.
+
+C. FIREBASE: REGLAS
+- Firebase Console > family-swan > Firestore Database > Rules.
+- Conserva las reglas de fase 2 que están en REGLAS_FIRESTORE.txt. No reemplaces por reglas públicas de escritura.
+- La lectura de los documentos familySwan está abierta para mostrar la página a visitantes; escritura solo creador/admin.
+- familySwanRoles solo puede gestionarlo el creador.
+
+D. DESPLEGAR LA FUNCIÓN DE CREACIÓN DE ADMINISTRADORES
+Requisitos: Node.js 20/22 y Firebase CLI. Revisa la guía oficial y pide ayuda a un adulto si no has usado terminal.
+- Abre una terminal dentro de la carpeta family_swan_firebase (donde está firebase.json).
+- Ejecuta:
+  npm install --prefix functions
+  npm install -g firebase-tools
+  firebase login
+  firebase projects:list
+- Confirma que el proyecto seleccionado es family-swan. Si no lo es, ejecuta:
+  firebase use family-swan
+- Despliega:
+  firebase deploy --only functions
+- Debe aparecer crearAdministradorSWAN en us-central1.
+
+E. CREAR ADMINISTRADORES
+- Entra en la web con la cuenta creadora (correo + contraseña de Firebase).
+- Pulsa el osito y entra.
+- En Panel del creador: Nombre visible, usuario (3–24 caracteres; minúsculas, números o _) y contraseña inicial (mínimo 6 caracteres).
+- Pulsa Crear administrador y comparte sus datos de acceso en privado.
+- Los administradores entran en el osito usando solo su usuario y contraseña; no escriben correo.
+- Para revocar, pulsa Quitar permisos.
+- El identificador técnico interno usuario@login.familyswan.app no envía ni recibe correo.
+
+F. PERSONALIZAR TEMPORADA
+- Inicia sesión como creador.
+- Abre Panel del creador > Personalizar FAMILY SWAN.
+- Elige Normal, Halloween, Navidad o Primavera; selecciona colores y animaciones.
+- Pulsa Guardar personalización. Se publica para todos los visitantes.
+
+PRUEBA RECOMENDADA
+1. Abre la página en dos navegadores (uno sin sesión de admin).
+2. Como creador, cambia la temporada a Halloween y guarda.
+3. Comprueba que el otro navegador recibe los tonos y adornos.
+4. Cambia a Navidad; verifica la nieve y regalos.
+5. Crea un administrador de prueba y verifica que puede editar, pero no gestionar otros admins.
+6. Revoca su rol y confirma que ya no puede guardar cambios.
+
+NOTAS
+- La galería almacena referencias/nombres en Firestore; los archivos de imagen deben existir en GitHub o en el alojamiento que uses. Esta versión no sube imágenes a Firebase Storage.
+- Las decoraciones son ligeras y no cubren los botones (pointer-events desactivado).
+- Si una temporada no aparece, revisa consola del navegador y reglas Firestore; el documento se llama familySwan/personalizacion.
+
+
+============================================
+FASE 4.1 — FOTOS DE PERFIL Y CHAT FAMILIAR
+============================================
+
+1) SUBIR ARCHIVOS
+- Reemplaza index.html, script.js y styles.css en tu repositorio GitHub.
+- Reemplaza REGLAS_FIRESTORE.txt por las reglas nuevas y publícalas en Firebase.
+- Conserva tus imágenes y el resto de archivos de la fase 4.
+
+2) ACTIVAR CHAT (NECESARIO)
+- Firebase Console > Authentication > Sign-in method.
+- Activa "Anonymous" (Inicio de sesión anónimo) y guarda.
+- El chat usa acceso anónimo automático: los visitantes no necesitan correo ni contraseña.
+- El chat es público: cualquiera que visite la página puede leer y escribir mensajes.
+- No compartan teléfonos, direcciones, contraseñas ni datos privados. El creador puede borrar mensajes desde Firestore (colección familySwanChat).
+
+3) REGLAS FIRESTORE
+- Copia el contenido actualizado de REGLAS_FIRESTORE.txt en Firestore > Rules y pulsa Publicar.
+- Las reglas permiten leer mensajes y escribir solo a sesiones autenticadas (el chat inicia sesión anónimo).
+- Los mensajes tienen límites de nombre (24) y texto (300 caracteres).
+
+4) FOTOS DE INTEGRANTES
+- En Panel administrador > Editar integrantes, edita una persona.
+- Puedes elegir una imagen existente de la galería en "O elegir una foto de la galería".
+- También puedes escribir un nombre de archivo o URL en Foto.
+- Ajusta el encuadre horizontal/vertical y guarda.
+- La referencia a la galería se sincroniza; si eliminas de la galería una foto usada como perfil, esa referencia puede quedar vacía o apuntar a otra imagen. Evita eliminar recuerdos que se usan como fotos de perfil.
+
+5) PRUEBA
+- Publica GitHub Pages y espera unos minutos.
+- Abre la página en dos navegadores/dispositivos.
+- Prueba enviar un mensaje y cambiar una foto de integrante como administrador.
+- Si no funciona, revisa la consola del navegador y las reglas de Firestore.
